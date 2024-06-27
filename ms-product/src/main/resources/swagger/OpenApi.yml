@@ -1,0 +1,474 @@
+openapi: 3.0.0
+info:
+  title: Banking System API
+  version: 1.0.0
+  description: API for managing banking customers and products
+
+servers:
+  - url: http://localhost:8081/api/v1
+tags:
+  - name: customer
+    description: Operation about Customers
+  - name: banckAccount
+    description: Operation about products
+  - name: credit
+    description: Operation about products
+
+
+paths:
+  /customers:
+    get:
+      tags:
+        - customer
+      summary: Get all customers
+      operationId: getAllCustomers
+      responses:
+        '200':
+          description: A list of customers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customer'
+    post:
+      tags:
+        - customer
+      summary: Create a new customer
+      operationId: createCustomer
+      requestBody:
+        description: Customer object that needs to be added
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Customer'
+      responses:
+        '201':
+          description: Customer created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+
+  /customers/{customerId}:
+    get:
+      tags:
+        - customer
+      summary: Get customer by ID
+      operationId: getCustomerById
+      parameters:
+        - name: customerId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Customer details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+    put:
+      tags:
+        - customer
+      summary: Update an existing customer
+      operationId: updateCustomer
+      parameters:
+        - name: customerId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Customer object that needs to be updated
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Customer'
+      responses:
+        '200':
+          description: Customer updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+    delete:
+      tags:
+        - customer
+      summary: Delete a customer
+      operationId: deleteCustomer
+      parameters:
+        - name: customerId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Customer deleted
+
+  /customers/{customerId}/bank-accounts:
+    post:
+      tags:
+        - customer
+      summary: Create a new bank account for a customer
+      operationId: createBankAccountForCustomers
+      parameters:
+        - name: customerId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Bank account object that needs to be added
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BankAccount'
+      responses:
+        '201':
+          description: Bank account created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BankAccount'
+
+  /customers/{customerId}/credits:
+    post:
+      tags:
+        - customer
+      summary: Create a new credit for a customer
+      operationId: createCreditForCustomers
+      parameters:
+        - name: customerId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Credit object that needs to be added
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Credit'
+      responses:
+        '201':
+          description: Credit created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Credit'
+
+  /bank-accounts:
+    get:
+      tags:
+        - banckAccount
+      summary: Get all bank accounts
+      operationId: getAllBankAccounts
+      responses:
+        '200':
+          description: A list of bank accounts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BankAccount'
+    post:
+      tags:
+        - banckAccount
+      summary: Create a new bank account
+      operationId: createBankAccount
+      requestBody:
+        description: Bank account object that needs to be added
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BankAccount'
+      responses:
+        '201':
+          description: Bank account created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BankAccount'
+
+  /bank-accounts/{bankAccountId}:
+    get:
+      tags:
+        - banckAccount
+      summary: Get bank account by ID
+      operationId: getBankAccountById
+      parameters:
+        - name: bankAccountId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Bank account details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BankAccount'
+    put:
+      tags:
+        - banckAccount
+      summary: Update an existing bank account
+      operationId: updateBankAccount
+      parameters:
+        - name: bankAccountId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Bank account object that needs to be updated
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BankAccount'
+      responses:
+        '200':
+          description: Bank account updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BankAccount'
+    delete:
+      tags:
+        - banckAccount
+      summary: Delete a bank account
+      operationId: deleteBankAccount
+      parameters:
+        - name: bankAccountId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Bank account deleted
+
+  /credits:
+    get:
+      tags:
+        - credit
+      summary: Get all credits
+      operationId: getAllCredits
+      responses:
+        '200':
+          description: A list of credits
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Credit'
+    post:
+      tags:
+        - credit
+      summary: Create a new credit
+      operationId: createCredit
+      requestBody:
+        description: Credit object that needs to be added
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Credit'
+      responses:
+        '201':
+          description: Credit created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Credit'
+
+  /credits/{creditId}:
+    get:
+      tags:
+        - credit
+      summary: Get credit by ID
+      operationId: getCreditById
+      parameters:
+        - name: creditId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Credit details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Credit'
+    put:
+      tags:
+        - credit
+      summary: Update an existing credit
+      operationId: updateCredit
+      parameters:
+        - name: creditId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Credit object that needs to be updated
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Credit'
+      responses:
+        '200':
+          description: Credit updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Credit'
+    delete:
+      tags:
+        - credit
+      summary: Delete a credit
+      operationId: deleteCredit
+      parameters:
+        - name: creditId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Credit deleted
+
+components:
+  schemas:
+    Customer:
+      type: object
+      required:
+        - name
+        - type
+      properties:
+        id:
+          type: string
+          example: 6675348775f0104124450e12
+        name:
+          type: string
+          example: jose pacherres flores
+        type:
+          type: string
+          enum: [personal, business]
+          example: personal
+        bankAccountIds:
+          type: array
+          items:
+            type: string
+        creditIds:
+          type: array
+          items:
+            type: string
+
+    BankAccount:
+      type: object
+      required:
+        - type
+        - balance
+      properties:
+        id:
+          type: string
+          example: 6675348775f0104124450e12
+        type:
+          type: string
+          enum: [savings, current, fixed_deposit]
+          example: savings
+        ownerId:
+          type: string
+          example: 6675348775f0104124450e18
+        balance:
+          type: number
+          format: double
+          example: 10.2
+        transactionLimit:
+          type: integer
+          example: 500.00
+        holders:
+          type: array
+          items:
+            type: string
+        authorizedSigners:
+          type: array
+          items:
+            type: string
+        transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Transaction'
+
+    Credit:
+      type: object
+      required:
+        - type
+        - limit
+        - balance
+      properties:
+        id:
+          type: string
+          example: 6675348775f0104124450e12
+        type:
+          type: string
+          enum: [personal, business, credit_card]
+          example: personal
+        limit:
+          type: number
+          format: double
+          example: 300.00
+        balance:
+          type: number
+          format: double
+          example: 120.00
+        ownerId:
+          type: string
+          example: 6675348775f0104124450e18
+        transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Transaction'
+
+    Transaction:
+      type: object
+      required:
+        - date
+        - amount
+        - type
+      properties:
+        id:
+          type: string
+          example: 6675348775f0104124450e19
+        date:
+          type: string
+          format: date-time
+          example: 2024-06-08 10:20:30
+        amount:
+          type: number
+          format: double
+          example: 250.00
+        type:
+          type: string
+          enum: [ deposit, withdrawal, payment, charge ]
+          example: deposit
+        description:
+          type: string
+          example: deposito espontaneo
+
+
