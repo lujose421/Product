@@ -1,6 +1,5 @@
 package com.nttdata.banco.controller;
 
-import com.nttdata.banco.persistence.entity.Customer;
 import com.nttdata.banco.service.BankAccountService;
 import com.nttdata.product.openapi.api.BanckAccountApi;
 import com.nttdata.product.openapi.model.BankAccountDTO;

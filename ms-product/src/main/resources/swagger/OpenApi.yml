@@ -7,18 +7,18 @@ info:
 servers:
   - url: http://localhost:8081
 tags:
-  - name: customer
+  - name: Customer
     description: Operation about Customers
-  - name: banckAccount
+  - name: BanckAccount
     description: Operation about products
-  - name: credit
+  - name: Credit
     description: Operation about products
 
 paths:
   /customers:
     get:
       tags:
-        - customer
+        - Customer
       summary: Get all customers
       operationId: getAllCustomers
       responses:
@@ -32,7 +32,7 @@ paths:
                   $ref: '#/components/schemas/CustomerDTO'
     post:
       tags:
-        - customer
+        - Customer
       summary: Create a new customer
       operationId: createCustomer
       requestBody:
@@ -53,7 +53,7 @@ paths:
   /customers/{customerId}:
     get:
       tags:
-        - customer
+        - Customer
       summary: Get customer by ID
       operationId: getCustomerById
       parameters:
@@ -71,7 +71,7 @@ paths:
                 $ref: '#/components/schemas/CustomerDTO'
     put:
       tags:
-        - customer
+        - Customer
       summary: Update an existing customer
       operationId: updateCustomer
       parameters:
@@ -96,7 +96,7 @@ paths:
                 $ref: '#/components/schemas/CustomerDTO'
     delete:
       tags:
-        - customer
+        - Customer
       summary: Delete a customer
       operationId: deleteCustomer
       parameters:
@@ -112,7 +112,7 @@ paths:
   /customers/{customerId}/bank-accounts:
     post:
       tags:
-        - customer
+        - Customer
       summary: Create a new bank account for a customer
       operationId: createBankAccountForCustomers
       parameters:
@@ -139,7 +139,7 @@ paths:
   /customers/{customerId}/credits:
     post:
       tags:
-        - customer
+        - Customer
       summary: Create a new credit for a customer
       operationId: createCreditForCustomers
       parameters:
@@ -166,7 +166,7 @@ paths:
   /bank-accounts:
     get:
       tags:
-        - banckAccount
+        - BanckAccount
       summary: Get all bank accounts
       operationId: getAllBankAccounts
       responses:
@@ -180,7 +180,7 @@ paths:
                   $ref: '#/components/schemas/BankAccountDTO'
     post:
       tags:
-        - banckAccount
+        - BanckAccount
       summary: Create a new bank account
       operationId: createBankAccount
       requestBody:
@@ -201,7 +201,7 @@ paths:
   /bank-accounts/{bankAccountId}:
     get:
       tags:
-        - banckAccount
+        - BanckAccount
       summary: Get bank account by ID
       operationId: getBankAccountById
       parameters:
@@ -219,7 +219,7 @@ paths:
                 $ref: '#/components/schemas/BankAccountDTO'
     put:
       tags:
-        - banckAccount
+        - BanckAccount
       summary: Update an existing bank account
       operationId: updateBankAccount
       parameters:
@@ -244,7 +244,7 @@ paths:
                 $ref: '#/components/schemas/BankAccountDTO'
     delete:
       tags:
-        - banckAccount
+        - BanckAccount
       summary: Delete a bank account
       operationId: deleteBankAccount
       parameters:
@@ -260,7 +260,7 @@ paths:
   /credits:
     get:
       tags:
-        - credit
+        - Credit
       summary: Get all credits
       operationId: getAllCredits
       responses:
@@ -274,7 +274,7 @@ paths:
                   $ref: '#/components/schemas/CreditDTO'
     post:
       tags:
-        - credit
+        - Credit
       summary: Create a new credit
       operationId: createCredit
       requestBody:
@@ -295,7 +295,7 @@ paths:
   /credits/{creditId}:
     get:
       tags:
-        - credit
+        - Credit
       summary: Get credit by ID
       operationId: getCreditById
       parameters:
@@ -313,7 +313,7 @@ paths:
                 $ref: '#/components/schemas/CreditDTO'
     put:
       tags:
-        - credit
+        - Credit
       summary: Update an existing credit
       operationId: updateCredit
       parameters:
@@ -338,7 +338,7 @@ paths:
                 $ref: '#/components/schemas/CreditDTO'
     delete:
       tags:
-        - credit
+        - Credit
       summary: Delete a credit
       operationId: deleteCredit
       parameters:
@@ -368,8 +368,8 @@ components:
         type:
           type: string
           enum:
-            - "personal"
-            - "business"
+            - staff
+            - business
           example: personal
         bankAccountIds:
           type: array
@@ -391,10 +391,10 @@ components:
           example: NUEVA INVERSION S.A.C.
         documentType:
           type: string
-          example: "RUC"
+          example: RUC
         documentNumber:
           type: string
-          example: "20365874125"
+          example: 20365874125
 
     AuthorizedSignersDTO:
       type: object
@@ -410,10 +410,10 @@ components:
           example: James
         documentType:
           type: string
-          example: "DNI"
+          example: DNI
         documentNumber:
           type: string
-          example: "45871236"
+          example: 45871236
 
     BankAccountDTO:
       type: object
