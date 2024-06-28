@@ -21,6 +21,9 @@ spring:
     mongodb:
       uri: mongodb+srv://josephadmin:7pc2I3a1YT2iFJcC@mongodb101.bldukdv.mongodb.net/dbbank
 
+webclient:
+  base-url-customer: http://localhost:8080
+
 springdoc:
   swagger-ui:
     #    enabled: true

@@ -3,7 +3,6 @@ package com.nttdata.banco.persistence.entity;
 import com.nttdata.product.openapi.model.AuthorizedSignersDTO;
 import com.nttdata.product.openapi.model.BankAccountDTO;
 import com.nttdata.product.openapi.model.HoldersDTO;
-import com.nttdata.product.openapi.model.TransactionDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
