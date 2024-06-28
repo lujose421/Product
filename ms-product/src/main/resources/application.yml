@@ -1,14 +1,22 @@
 
+#spring:
+#  application:
+#    name: ms-product
+#  config:
+#    import: configserver:http://localhost:8085
+#  profiles:
+#    active: default
+server:
+  port: 8081
+
 spring:
+  cloud:
+    config:
+      enabled: false
+      import-check:
+        enabled: false
   application:
     name: ms-product
-  config:
-    import: configserver:http://localhost:8085
-  profiles:
-    active: default
-
-
-
-
-
-
+  data:
+    mongodb:
+      uri: mongodb+srv://josephadmin:7pc2I3a1YT2iFJcC@mongodb101.bldukdv.mongodb.net/dbbank

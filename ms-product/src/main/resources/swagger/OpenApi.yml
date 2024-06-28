@@ -5,7 +5,7 @@ info:
   description: API for managing banking customers and products
 
 servers:
-  - url: http://localhost:8081/api/v1
+  - url: http://localhost:8081
 tags:
   - name: customer
     description: Operation about Customers
@@ -13,7 +13,6 @@ tags:
     description: Operation about products
   - name: credit
     description: Operation about products
-
 
 paths:
   /customers:
@@ -30,7 +29,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Customer'
+                  $ref: '#/components/schemas/CustomerDTO'
     post:
       tags:
         - customer
@@ -42,14 +41,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Customer'
+              $ref: '#/components/schemas/CustomerDTO'
       responses:
         '201':
           description: Customer created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Customer'
+                $ref: '#/components/schemas/CustomerDTO'
 
   /customers/{customerId}:
     get:
@@ -69,7 +68,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Customer'
+                $ref: '#/components/schemas/CustomerDTO'
     put:
       tags:
         - customer
@@ -87,14 +86,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Customer'
+              $ref: '#/components/schemas/CustomerDTO'
       responses:
         '200':
           description: Customer updated
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Customer'
+                $ref: '#/components/schemas/CustomerDTO'
     delete:
       tags:
         - customer
@@ -128,14 +127,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/BankAccount'
+              $ref: '#/components/schemas/BankAccountDTO'
       responses:
         '201':
           description: Bank account created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BankAccount'
+                $ref: '#/components/schemas/BankAccountDTO'
 
   /customers/{customerId}/credits:
     post:
@@ -155,14 +154,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Credit'
+              $ref: '#/components/schemas/CreditDTO'
       responses:
         '201':
           description: Credit created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Credit'
+                $ref: '#/components/schemas/CreditDTO'
 
   /bank-accounts:
     get:
@@ -178,7 +177,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/BankAccount'
+                  $ref: '#/components/schemas/BankAccountDTO'
     post:
       tags:
         - banckAccount
@@ -190,14 +189,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/BankAccount'
+              $ref: '#/components/schemas/BankAccountDTO'
       responses:
         '201':
           description: Bank account created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BankAccount'
+                $ref: '#/components/schemas/BankAccountDTO'
 
   /bank-accounts/{bankAccountId}:
     get:
@@ -217,7 +216,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BankAccount'
+                $ref: '#/components/schemas/BankAccountDTO'
     put:
       tags:
         - banckAccount
@@ -235,14 +234,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/BankAccount'
+              $ref: '#/components/schemas/BankAccountDTO'
       responses:
         '200':
           description: Bank account updated
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BankAccount'
+                $ref: '#/components/schemas/BankAccountDTO'
     delete:
       tags:
         - banckAccount
@@ -272,7 +271,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Credit'
+                  $ref: '#/components/schemas/CreditDTO'
     post:
       tags:
         - credit
@@ -284,14 +283,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Credit'
+              $ref: '#/components/schemas/CreditDTO'
       responses:
         '201':
           description: Credit created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Credit'
+                $ref: '#/components/schemas/CreditDTO'
 
   /credits/{creditId}:
     get:
@@ -311,7 +310,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Credit'
+                $ref: '#/components/schemas/CreditDTO'
     put:
       tags:
         - credit
@@ -329,14 +328,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Credit'
+              $ref: '#/components/schemas/CreditDTO'
       responses:
         '200':
           description: Credit updated
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Credit'
+                $ref: '#/components/schemas/CreditDTO'
     delete:
       tags:
         - credit
@@ -354,7 +353,7 @@ paths:
 
 components:
   schemas:
-    Customer:
+    CustomerDTO:
       type: object
       required:
         - name
@@ -368,18 +367,55 @@ components:
           example: jose pacherres flores
         type:
           type: string
-          enum: [personal, business]
+          enum:
+            - "personal"
+            - "business"
           example: personal
         bankAccountIds:
           type: array
           items:
-            type: string
+            $ref: '#/components/schemas/BankAccountDTO'
         creditIds:
           type: array
           items:
             type: string
 
-    BankAccount:
+    HoldersDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 6675348775f0104124450e12
+        razon:
+          type: string
+          example: NUEVA INVERSION S.A.C.
+        documentType:
+          type: string
+          example: "RUC"
+        documentNumber:
+          type: string
+          example: "20365874125"
+
+    AuthorizedSignersDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 6675348775f0104124450e13
+        name:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: James
+        documentType:
+          type: string
+          example: "DNI"
+        documentNumber:
+          type: string
+          example: "45871236"
+
+    BankAccountDTO:
       type: object
       required:
         - type
@@ -390,7 +426,10 @@ components:
           example: 6675348775f0104124450e12
         type:
           type: string
-          enum: [savings, current, fixed_deposit]
+          enum:
+            - savings
+            - current
+            - fixed_deposit
           example: savings
         ownerId:
           type: string
@@ -405,17 +444,13 @@ components:
         holders:
           type: array
           items:
-            type: string
+            $ref: '#/components/schemas/HoldersDTO'
         authorizedSigners:
           type: array
           items:
-            type: string
-        transactions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Transaction'
+            $ref: '#/components/schemas/AuthorizedSignersDTO'
 
-    Credit:
+    CreditDTO:
       type: object
       required:
         - type
@@ -427,7 +462,10 @@ components:
           example: 6675348775f0104124450e12
         type:
           type: string
-          enum: [personal, business, credit_card]
+          enum:
+            - personal
+            - business
+            - credit_card
           example: personal
         limit:
           type: number
@@ -443,9 +481,9 @@ components:
         transactions:
           type: array
           items:
-            $ref: '#/components/schemas/Transaction'
+            $ref: '#/components/schemas/TransactionDTO'
 
-    Transaction:
+    TransactionDTO:
       type: object
       required:
         - date
@@ -465,10 +503,12 @@ components:
           example: 250.00
         type:
           type: string
-          enum: [ deposit, withdrawal, payment, charge ]
+          enum:
+            - deposit
+            - withdrawal
+            - payment
+            - charge
           example: deposit
         description:
           type: string
           example: deposito espontaneo
-
-

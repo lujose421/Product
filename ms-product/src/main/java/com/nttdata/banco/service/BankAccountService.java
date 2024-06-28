@@ -1,13 +1,14 @@
 package com.nttdata.banco.service;
 
-import com.nttdata.banco.openapi.model.BankAccount;
+import com.nttdata.banco.persistence.entity.BankAccount;
+import com.nttdata.product.openapi.model.BankAccountDTO;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface BankAccountService {
-    public Mono<BankAccount> createBankAccount(BankAccount bankAccount);
-    public Flux<BankAccount> getAllBankAccounts();
-    public Mono<BankAccount> getBankAccountById(String id);
-    public Mono<BankAccount> updateBankAccount(String id, BankAccount bankAccount);
-    public Mono<Void> deleteBankAccount(String id);
+    public Flux<BankAccountDTO> getAllBankAccounts();
+    public Mono<BankAccountDTO> createBankAccount(BankAccountDTO bankAccountDTO);
+    public Mono<BankAccountDTO> getBankAccountById(String bankAccountId);
+    public Mono<BankAccountDTO> updateBankAccount(String bankAccountId, BankAccountDTO bankAccountDTO);
+    public Mono<Void> deleteBankAccount(String bankAccountId);
 }

@@ -105,18 +105,18 @@
                         <configuration>
                             <inputSpec>${project.basedir}/src/main/resources/swagger/OpenApi.yml</inputSpec>
                             <generatorName>spring</generatorName>
-                            <packageName>com.nttdata.product.openapi</packageName>
-                            <apiPackage>com.nttdata.banco.openapi.api</apiPackage>
-                            <modelPackage>com.nttdata.banco.openapi.model</modelPackage>
+                            <!--<packageName>com.nttdata.product.openapi</packageName>-->
+                            <apiPackage>com.nttdata.product.openapi.api</apiPackage>
+                            <modelPackage>com.nttdata.product.openapi.model</modelPackage>
                             <configOptions>
                                 <reactive>true</reactive>
                                 <openApiNullable>false</openApiNullable>
-                                <!--								<useSpringBoot3>true</useSpringBoot3>-->
+                                <!--<useSpringBoot3>true</useSpringBoot3>-->
                                 <useSwaggerUI>true</useSwaggerUI>
                                 <useTags>true</useTags>
                                 <interfaceOnly>true</interfaceOnly>
-                                <!--								<useSpringController>false</useSpringController>-->
-                                <!--								<skipServerWebExchange>true</skipServerWebExchange>-->
+                                <!--<useSpringController>false</useSpringController>-->
+                                <!--skipServerWebExchange>true</skipServerWebExchange>-->
                             </configOptions>
                         </configuration>
                     </execution>

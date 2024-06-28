@@ -1,6 +1,6 @@
 package com.nttdata.banco.persistence.repository;
 
-import com.nttdata.banco.openapi.model.Credit;
+import com.nttdata.banco.persistence.entity.Credit;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import org.springframework.stereotype.Repository;
 

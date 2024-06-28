@@ -1,18 +1,15 @@
 package com.nttdata.banco.service;
 
-import com.nttdata.banco.openapi.model.BankAccount;
-import com.nttdata.banco.openapi.model.Credit;
+import com.nttdata.banco.persistence.entity.BankAccount;
+import com.nttdata.banco.persistence.entity.Credit;
+import com.nttdata.product.openapi.model.BankAccountDTO;
+import com.nttdata.product.openapi.model.CreditDTO;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface CustomerService {
-
-    public Mono<BankAccount> createBankAccount(BankAccount bankAccount);
-
-
-    public Flux<BankAccount> getAllBankAccounts();
-
-    public Mono<Credit> createCredit(Credit credit);
-
-    public Flux<Credit> getAllCredits();
+    public Mono<BankAccountDTO> createBankAccount(BankAccountDTO bankAccount);
+    public Flux<BankAccountDTO> getAllBankAccounts();
+    public Mono<CreditDTO> createCredit(CreditDTO creditDTO);
+    public Flux<CreditDTO> getAllCredits();
 }

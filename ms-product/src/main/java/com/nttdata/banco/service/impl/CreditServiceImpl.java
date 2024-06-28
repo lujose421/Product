@@ -1,8 +1,8 @@
 package com.nttdata.banco.service.impl;
 
-import com.nttdata.banco.openapi.model.Credit;
 import com.nttdata.banco.persistence.repository.CreditRepository;
 import com.nttdata.banco.service.CreditService;
+import com.nttdata.product.openapi.model.CreditDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -14,31 +14,35 @@ public class CreditServiceImpl implements CreditService {
     private CreditRepository creditRepository;
 
     @Override
-    public Mono<Credit> createCredit(Credit credit) {
-        return creditRepository.save(credit);
+    public Mono<CreditDTO> createCredit(CreditDTO creditDTO) {
+//        return creditRepository.save(creditDTO);
+        return Mono.empty();
     }
 
     @Override
-    public Flux<Credit> getAllCredits() {
-        return creditRepository.findAll();
+    public Flux<CreditDTO> getAllCredits() {
+//        return creditRepository.findAll();
+        return Flux.empty();
     }
 
     @Override
-    public Mono<Credit> getCreditById(String id) {
-        return creditRepository.findById(id);
+    public Mono<CreditDTO> getCreditById(String id) {
+//        return creditRepository.findById(id);
+        return Mono.empty();
     }
 
     @Override
-    public Mono<Credit> updateCredit(String id, Credit credit) {
-        return creditRepository.findById(id)
-                .flatMap(existingCredit -> {
-                    existingCredit.setType(credit.getType());
-                    existingCredit.setLimit(credit.getLimit());
-                    existingCredit.setBalance(credit.getBalance());
-                    existingCredit.setOwnerId(credit.getOwnerId());
-                    existingCredit.setTransactions(credit.getTransactions());
-                    return creditRepository.save(existingCredit);
-                });
+    public Mono<CreditDTO> updateCredit(String id, CreditDTO creditDTO) {
+//        return creditRepository.findById(id)
+//                .flatMap(existingCredit -> {
+//                    existingCredit.setType(creditDTO.getType());
+//                    existingCredit.setLimit(creditDTO.getLimit());
+//                    existingCredit.setBalance(creditDTO.getBalance());
+//                    existingCredit.setOwnerId(creditDTO.getOwnerId());
+//                    existingCredit.setTransactions(creditDTO.getTransactions());
+//                    return creditRepository.save(existingCredit);
+//                });
+        return Mono.empty();
     }
 
     @Override
