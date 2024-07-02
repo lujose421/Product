@@ -1,5 +1,6 @@
 package com.nttdata.banco.service.impl;
 
+import com.nttdata.banco.exception.types.NotFoundException;
 import com.nttdata.banco.persistence.entity.BankAccount;
 import com.nttdata.banco.persistence.repository.BankAccountRepository;
 import com.nttdata.banco.service.BankAccountService;
@@ -15,8 +16,13 @@ import reactor.core.publisher.Mono;
 @Service
 public class BankAccountServiceImpl implements BankAccountService {
 
+    private static final String CUSTOMER_NOT_FOUND_MESSAGE = "Customer with ID %s does not exist";
+
     @Autowired
     private BankAccountRepository bankAccountRepository;
+
+    @Autowired
+    private CustomerRestServiceImpl customerRestService;
 
     private static final Logger logger = LoggerFactory.getLogger(BankAccountServiceImpl.class);
 
@@ -34,23 +40,31 @@ public class BankAccountServiceImpl implements BankAccountService {
     }
 
     @Override
-    public Mono<BankAccountDTO> createBankAccount(BankAccountDTO bankAccountDTO) {
-        logger.info("service createBankAccount - ini");
-        return Mono.just(bankAccountDTO)
-                .map(AppUtils::dtoToEntity)
-                .flatMap(this.bankAccountRepository::insert)
-                .map(AppUtils::entityToDto)
-                .doOnNext(bankAccount -> logger.info("bankAccount create: {}", bankAccount))
-                .doOnTerminate(() -> logger.info("service createBankAccount - end"));
-    }
-
-    @Override
     public Mono<BankAccountDTO> getBankAccountById(String bankAccountId) {
         logger.info("service getBankAccountById - ini");
         return this.bankAccountRepository.findById(bankAccountId)
                 .doOnError(error -> logger.error("Error getBankAccountById: ", error))
                 .map(AppUtils::entityToDto)
                 .doOnTerminate(() -> logger.info("service getBankAccountById - end"));
+    }
+
+    @Override
+    public Mono<BankAccountDTO> createBankAccount(BankAccountDTO bankAccountDTO) {
+        logger.info("service createBankAccount - ini");
+        return this.customerRestService.getCustomerById(bankAccountDTO.getOwnerId())
+                .flatMap(customer -> {
+                    // Verify ownerId equal in Customer (ms-customer)
+                    if (!customer.getId().equals(bankAccountDTO.getOwnerId())) {
+                        Mono.error(new NotFoundException(CUSTOMER_NOT_FOUND_MESSAGE, bankAccountDTO.getOwnerId()));
+                        return Mono.error(new NotFoundException("OwnerId no exist"));
+                    }
+                    return Mono.just(bankAccountDTO)
+                            .map(AppUtils::dtoToEntity)
+                            .flatMap(this.bankAccountRepository::insert)
+                            .map(AppUtils::entityToDto)
+                            .doOnNext(bankAccount -> logger.info("bankAccount create: {}", bankAccount));
+                })
+                .doOnTerminate(() -> logger.info("service createBankAccount - end"));
     }
 
     @Override
