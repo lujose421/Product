@@ -351,6 +351,49 @@ paths:
         '204':
           description: Credit deleted
 
+
+  /transaction:
+    post:
+      tags:
+        - Transaction
+      summary: Create a new transaction
+      operationId: createTransaction
+      requestBody:
+        description: Transaction object that needs to be added
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionDTO'
+      responses:
+        '201':
+          description: Credit created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionDTO'
+
+  /transaction/{numOperacion}:
+    get:
+      tags:
+        - Transaction
+      summary: Get transaction by numOperacion
+      operationId: getTransactionById
+      parameters:
+        - name: numOperacion
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Credit details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionDTO'
+
+
 components:
   schemas:
     CustomerDTO:
@@ -370,7 +413,7 @@ components:
           enum:
             - staff
             - business
-          example: personal
+          example: staff
         bankAccountIds:
           type: array
           items:
@@ -475,13 +518,17 @@ components:
           type: number
           format: double
           example: 120.00
+        debt:
+          type: number
+          format: double
+          example: 0.00
         ownerId:
           type: string
           example: 6675348775f0104124450e18
-        transactions:
-          type: array
-          items:
-            $ref: '#/components/schemas/TransactionDTO'
+        ownerComplete:
+            $ref: '#/components/schemas/CustomerDTO'
+
+
 
     TransactionDTO:
       type: object

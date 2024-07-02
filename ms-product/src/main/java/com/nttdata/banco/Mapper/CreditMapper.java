@@ -26,7 +26,8 @@ public class CreditMapper {
         newCredit.setType(creditDTO.getType());
         newCredit.setLimit(creditDTO.getLimit());
         newCredit.setBalance(creditDTO.getBalance());
-        newCredit.setBalance(creditDTO.getBalance());
+        newCredit.setDebt(creditDTO.getDebt());
+        newCredit.setOwnerId(creditDTO.getOwnerId());
         return newCredit;
     }
 }

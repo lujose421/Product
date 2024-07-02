@@ -17,7 +17,8 @@ public class Credit {
     private String id;
     private CreditDTO.TypeEnum type;
     private Double balance;
-    private String ownerId;
+    private Double debt;
     private Double limit;
+    private String ownerId;
     //private List<TransactionDTO> transactions;
 }
