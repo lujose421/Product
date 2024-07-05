@@ -25,31 +25,25 @@ public class CreditController implements CreditApi {
 
     @Override
     public Mono<ResponseEntity<Flux<CreditDTO>>> getAllCredits(ServerWebExchange exchange) {
-        logger.info("endpooint getAllCredit - ini ");
-        return Mono.just(ResponseEntity.ok().body(this.creditService.getAllCredits()))
-                .doOnTerminate(() -> logger.info("endpoint - getAllCredits - end"));
+        return Mono.just(ResponseEntity.ok().body(this.creditService.getAllCredits()));
     }
 
 
     @Override
     public Mono<ResponseEntity<CreditDTO>> getCreditById(
             @PathVariable String creditId, ServerWebExchange exchange) {
-        logger.info("endpoint getCreditById - ini");
         return this.creditService.getCreditById(creditId)
                 .map(ResponseEntity::ok)
-                .defaultIfEmpty(ResponseEntity.status(HttpStatus.NOT_FOUND).build())
-                .doOnTerminate(() -> logger.info("endpoint getCreditById - end"));
+                .defaultIfEmpty(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
     @Override
     public Mono<ResponseEntity<CreditDTO>> createCredit(
             @RequestBody Mono<CreditDTO> credit, ServerWebExchange exchange) {
-        logger.info("endpoint createCredit - ini");
         return credit
                 .flatMap(this.creditService::createCredit)
                 .map(creditMAp -> ResponseEntity.status(HttpStatus.CREATED).body(creditMAp))
-                .defaultIfEmpty(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build())
-                .doOnTerminate(() -> logger.info("endpoint createCredit - end"));
+                .defaultIfEmpty(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
     }
 
 
@@ -57,21 +51,17 @@ public class CreditController implements CreditApi {
     public Mono<ResponseEntity<CreditDTO>> updateCredit(
             @PathVariable String creditId,
             @RequestBody Mono<CreditDTO> creditDTO, ServerWebExchange exchange) {
-        logger.info("endpoint updateCredit - ini");
         return creditDTO
                 .flatMap(creditMapper -> creditService.updateCredit(creditId, creditMapper))
                 .map(ResponseEntity::ok)
-                .defaultIfEmpty(ResponseEntity.status(HttpStatus.NOT_FOUND).build())
-                .doOnTerminate(() -> logger.info("endpoint updateBankAccount - end"));
+                .defaultIfEmpty(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
     @Override
     public Mono<ResponseEntity<Void>> deleteCredit(
             @PathVariable String creditId, ServerWebExchange exchange) {
-        logger.info("endpoint deleteCredit - ini");
         return this.creditService.deleteCredit(creditId)
                 .map(ResponseEntity::ok)
-                .defaultIfEmpty(ResponseEntity.status(HttpStatus.NOT_FOUND).build())
-                .doOnTerminate(() -> logger.info("endpoint deleteCredit -end"));
+                .defaultIfEmpty(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 }

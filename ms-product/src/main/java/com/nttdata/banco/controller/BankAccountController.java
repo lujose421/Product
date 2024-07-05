@@ -51,21 +51,17 @@ public class BankAccountController implements BanckAccountApi {
     public Mono<ResponseEntity<BankAccountDTO>> updateBankAccount(
             @Valid @PathVariable String bankAccountId,
             @Valid @RequestBody Mono<BankAccountDTO> bankAccount, ServerWebExchange exchange) {
-        logger.info("endpoint updateBankAccount - ini");
         return bankAccount
                 .flatMap(bankAcct -> this.bankAccountService.updateBankAccount(bankAccountId, bankAcct))
                 .map(ResponseEntity::ok)
-                .defaultIfEmpty(ResponseEntity.status(HttpStatus.NOT_FOUND).build())
-                .doOnTerminate(() -> logger.info("endpoint updateBankAccount - end"));
+                .defaultIfEmpty(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
     @Override
     public Mono<ResponseEntity<Void>> deleteBankAccount(
             @Valid @PathVariable String bankAccountId, ServerWebExchange exchange) {
-        logger.info("endpoint deleteBankAccount - ini");
         return this.bankAccountService.deleteBankAccount(bankAccountId)
                 .map(ResponseEntity::ok)
-                .defaultIfEmpty(ResponseEntity.status(HttpStatus.NOT_FOUND).build())
-                .doOnTerminate(() -> logger.info("endpoint deleteBankAccount - end"));
+                .defaultIfEmpty(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 }
