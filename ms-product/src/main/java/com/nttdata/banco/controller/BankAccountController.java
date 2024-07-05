@@ -15,6 +15,8 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import javax.validation.Valid;
+
 @RestController
 public class BankAccountController implements BanckAccountApi {
 
@@ -25,36 +27,30 @@ public class BankAccountController implements BanckAccountApi {
 
     @Override
     public Mono<ResponseEntity<Flux<BankAccountDTO>>> getAllBankAccounts(ServerWebExchange exchange) {
-        logger.info("endpoint getAllBankAccounts - ini");
-        return Mono.just(ResponseEntity.ok().body(this.bankAccountService.getAllBankAccounts()))
-                .doOnTerminate(() -> logger.info("endpoint getAllBankAccounts - end"));
+        return Mono.just(ResponseEntity.ok().body(this.bankAccountService.getAllBankAccounts()));
     }
 
     @Override
     public Mono<ResponseEntity<BankAccountDTO>> getBankAccountById(
-            @PathVariable String bankAccountId, ServerWebExchange exchange) {
-        logger.info("endpoint getBankAccountById - ini");
+            @Valid @PathVariable String bankAccountId, ServerWebExchange exchange) {
         return this.bankAccountService.getBankAccountById(bankAccountId)
                 .map(ResponseEntity::ok)
-                .defaultIfEmpty(ResponseEntity.status(HttpStatus.NOT_FOUND).build())
-                .doOnTerminate(() -> logger.info("endpoint getBankAccountById - end"));
+                .defaultIfEmpty(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
     @Override
     public Mono<ResponseEntity<BankAccountDTO>> createBankAccount(
-            @RequestBody Mono<BankAccountDTO> bankAccount, ServerWebExchange exchange) {
-        logger.info("endpoint createBankAccount - ini");
+            @Valid @RequestBody Mono<BankAccountDTO> bankAccount, ServerWebExchange exchange) {
         return bankAccount
                 .flatMap(this.bankAccountService::createBankAccount)
                 .map(bankAcct -> ResponseEntity.status(HttpStatus.CREATED).body(bankAcct))
-                .defaultIfEmpty(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build())
-                .doOnTerminate(() -> logger.info("endpoint createBankAccount - end"));
+                .defaultIfEmpty(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
     }
 
     @Override
     public Mono<ResponseEntity<BankAccountDTO>> updateBankAccount(
-            @PathVariable String bankAccountId,
-            @RequestBody Mono<BankAccountDTO> bankAccount, ServerWebExchange exchange) {
+            @Valid @PathVariable String bankAccountId,
+            @Valid @RequestBody Mono<BankAccountDTO> bankAccount, ServerWebExchange exchange) {
         logger.info("endpoint updateBankAccount - ini");
         return bankAccount
                 .flatMap(bankAcct -> this.bankAccountService.updateBankAccount(bankAccountId, bankAcct))
@@ -65,7 +61,7 @@ public class BankAccountController implements BanckAccountApi {
 
     @Override
     public Mono<ResponseEntity<Void>> deleteBankAccount(
-            @PathVariable String bankAccountId, ServerWebExchange exchange) {
+            @Valid @PathVariable String bankAccountId, ServerWebExchange exchange) {
         logger.info("endpoint deleteBankAccount - ini");
         return this.bankAccountService.deleteBankAccount(bankAccountId)
                 .map(ResponseEntity::ok)
