@@ -119,4 +119,9 @@ public class CreditServiceImpl implements CreditService {
     public Mono<Void> deleteCredit(String id) {
         return creditRepository.deleteById(id);
     }
+
+    @Override
+    public Mono<Double> getBalance(String id) {
+        return creditRepository.findBalanceById(id);
+    }
 }

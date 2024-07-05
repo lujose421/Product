@@ -14,4 +14,6 @@ public interface CreditService {
     public Mono<CreditDTO> updateCredit(String creditId, CreditDTO creditDTO);
 
     public Mono<Void> deleteCredit(String id);
+
+    public Mono<Double> getBalance(String id);
 }

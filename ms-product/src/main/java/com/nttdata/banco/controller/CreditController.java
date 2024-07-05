@@ -17,7 +17,6 @@ import reactor.core.publisher.Mono;
 
 
 @RestController
-
 public class CreditController implements CreditApi {
     @Autowired
     private CreditService creditService;

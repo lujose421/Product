@@ -542,7 +542,7 @@ components:
           example: 6675348775f0104124450e19
         date:
           type: string
-          format: date-time
+          format: date
           example: 2024-06-08 10:20:30
         amount:
           type: number
@@ -556,6 +556,19 @@ components:
             - payment
             - charge
           example: deposit
+        accountType:
+          type: string
+          enum:
+            - savings
+            - current
+            - fixed_deposit
+            - personal
+            - business
+            - credit_card
+          example: savings
+        productNum:
+          type: string
+          example: 6682f03738d9dc4e915d6f9a
         description:
           type: string
           example: deposito espontaneo

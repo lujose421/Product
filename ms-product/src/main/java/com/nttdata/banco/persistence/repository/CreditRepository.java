@@ -8,4 +8,5 @@ import reactor.core.publisher.Mono;
 @Repository
 public interface CreditRepository extends ReactiveMongoRepository<Credit, String> {
     Mono<Boolean> findByOwnerIdAndType(String ownnerId, String type);
+    Mono<Double> findBalanceById(String id);
 }
