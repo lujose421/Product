@@ -1,7 +1,9 @@
 package com.nttdata.banco.service.impl;
 
+import com.nttdata.banco.Constanst.AppContanst;
 import com.nttdata.banco.persistence.dto.CustomerRestDTO;
 import com.nttdata.banco.service.CustomerRestService;
+import com.nttdata.product.openapi.model.CustomerDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -13,6 +15,7 @@ import reactor.core.publisher.Mono;
 public class CustomerRestServiceImpl implements CustomerRestService {
 
     private final WebClient webClient;
+
 
     @Autowired
     public CustomerRestServiceImpl(WebClient webClient) {
@@ -34,5 +37,31 @@ public class CustomerRestServiceImpl implements CustomerRestService {
                 .retrieve()
                 .bodyToMono(CustomerRestDTO.class)
                 .onErrorResume(WebClientResponseException.class, Mono::error);
+    }
+
+    @Override
+    public Mono<CustomerDTO> customerFindByOwnerId(String ownerId) {
+        return webClient.get()
+                .uri(AppContanst.OBTENER_CUSTOMER_ID + ownerId)
+                .retrieve()
+                .bodyToMono(CustomerDTO.class)
+                .onErrorResume(WebClientResponseException.NotFound.class, e -> Mono.empty())
+                .onErrorResume(WebClientResponseException.class, e -> {
+                    return Mono.error(new RuntimeException("Error fetching customer", e));
+                });
+    }
+
+    @Override
+    public Mono<Boolean> customerExist(String ownerId) {
+        return webClient
+                .get()
+                .uri(AppContanst.OBTENER_CUSTOMER_ID + ownerId)
+                .retrieve()
+                .toBodilessEntity()
+                .map(response -> Boolean.TRUE)
+                .onErrorResume(WebClientResponseException.NotFound.class, e -> Mono.just(Boolean.FALSE))
+                .onErrorResume(WebClientResponseException.class, e -> {
+                    return Mono.error(new RuntimeException("Error al comprobar Existencia Del cliente", e));
+                });
     }
 }

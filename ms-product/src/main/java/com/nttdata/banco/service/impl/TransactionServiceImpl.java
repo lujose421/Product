@@ -4,6 +4,7 @@ import com.nttdata.banco.Constanst.AppContanst;
 import com.nttdata.banco.Mapper.TransactionMapper;
 import com.nttdata.banco.persistence.entity.Transaction;
 import com.nttdata.banco.persistence.repository.TransactionRepository;
+import com.nttdata.banco.service.BankAccountService;
 import com.nttdata.banco.service.CreditService;
 import com.nttdata.banco.service.TransactionService;
 import com.nttdata.product.openapi.model.TransactionDTO;
@@ -24,6 +25,9 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Autowired
     private CreditService creditService;
+
+    @Autowired
+    private BankAccountService bankAccountService;
     private static final Logger logger = LoggerFactory.getLogger(BankAccountServiceImpl.class);
 
 
@@ -35,8 +39,7 @@ public class TransactionServiceImpl implements TransactionService {
                     if (!AppContanst.BANK_ACCOUNT.equals(valid) || !AppContanst.CREDIT.equals(valid)) {
                         return Mono.error(new RuntimeException("invalid Transaction"));
                     } else if (AppContanst.BANK_ACCOUNT.equals(valid)) {
-                        return null;
-                        //movimientos que toca hacer con bankaccount
+                        return processBankaccountTransaction(transactionDTO);
                     } else if (AppContanst.CREDIT.equals(valid)) {
                         return processCreditTransaction(transactionDTO);
                     } else {
@@ -70,7 +73,7 @@ public class TransactionServiceImpl implements TransactionService {
         return this.transactionRepository.countAllByProductNumAndDateBetween(productNum, startOfMonth, ensOfMonth);
     }
 
-    private Mono<Boolean> validateBalance(TransactionDTO transactionDTO) {
+    private Mono<Boolean> validateCreditBalance(TransactionDTO transactionDTO) {
         if (transactionDTO.getType() == TransactionDTO.TypeEnum.WITHDRAWAL) {
             return creditService.getBalance(transactionDTO.getProductNum())
                     .flatMap(balance -> {
@@ -83,7 +86,7 @@ public class TransactionServiceImpl implements TransactionService {
         return Mono.just(Boolean.TRUE);
     }
 
-    private Mono<Object> updateBalance(TransactionDTO transactionDTO) {
+    private Mono<Object> updateCreditBalance(TransactionDTO transactionDTO) {
         return creditService.getBalance(transactionDTO.getProductNum())
                 .flatMap(currentBalance -> {
                     double newBalance = currentBalance + (transactionDTO.getType() == TransactionDTO.TypeEnum.DEPOSIT ? transactionDTO.getAmount() : -transactionDTO.getAmount());
@@ -99,14 +102,51 @@ public class TransactionServiceImpl implements TransactionService {
         return creditService.getCreditById(transactionDTO.getProductNum())
                 .switchIfEmpty(Mono.error(new RuntimeException("Credit Not found")))
                 .flatMap(credit -> validateMonthlyTransactionsOfCredits(transactionDTO.getProductNum()))
-                .flatMap(credit -> validateBalance(transactionDTO))
-                .flatMap(credit -> updateBalance(transactionDTO))
+                .flatMap(credit -> validateCreditBalance(transactionDTO))
+                .flatMap(credit -> updateCreditBalance(transactionDTO))
                 .flatMap(credit -> {
                     Transaction transaction = TransactionMapper.dtoToEntity(transactionDTO);
                     return transactionRepository.save(transaction)
                             .map(TransactionMapper::entityToDto);
                 });
 
+    }
+
+    private Mono<Boolean> validateBankAccountBalance(TransactionDTO transactionDTO) {
+        if (transactionDTO.getType() == TransactionDTO.TypeEnum.WITHDRAWAL) {
+            return bankAccountService.getBalance(transactionDTO.getProductNum())
+                    .flatMap(balance -> {
+                        if (balance < transactionDTO.getAmount()) {
+                            return Mono.error(new RuntimeException("Saldo insuficiente"));
+                        }
+                        return Mono.just(Boolean.TRUE);
+                    });
+        }
+        return Mono.just(Boolean.TRUE);
+    }
+
+    private Mono<Object> updateBankAccountBalance(TransactionDTO transactionDTO) {
+        return bankAccountService.getBalance(transactionDTO.getProductNum())
+                .flatMap(currentBalance -> {
+                    double newBalance = currentBalance + (transactionDTO.getType() == TransactionDTO.TypeEnum.DEPOSIT ? transactionDTO.getAmount() : -transactionDTO.getAmount());
+                    return bankAccountService.getBankAccountById(transactionDTO.getProductNum())
+                            .flatMap(bankAccountDTO -> {
+                                bankAccountDTO.setBalance(newBalance);
+                                return bankAccountService.updateBankAccount(bankAccountDTO.getId(), bankAccountDTO);
+                            });
+                });
+    }
+
+    private Mono<TransactionDTO> processBankaccountTransaction(TransactionDTO transactionDTO) {
+        return bankAccountService.getBankAccountById(transactionDTO.getProductNum())
+                .switchIfEmpty(Mono.error(new RuntimeException("Cuenta Bancaria no encontrada")))
+                .flatMap(bankAccount -> validateBankAccountBalance(transactionDTO))
+                .flatMap(bankAccount -> updateBankAccountBalance(transactionDTO))
+                .flatMap(bankAccount -> {
+                    Transaction transaction = TransactionMapper.dtoToEntity(transactionDTO);
+                    return transactionRepository.save(transaction)
+                            .map(TransactionMapper::entityToDto);
+                });
     }
 
     @Override

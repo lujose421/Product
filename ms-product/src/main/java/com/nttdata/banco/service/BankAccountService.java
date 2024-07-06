@@ -15,5 +15,6 @@ public interface BankAccountService {
     Mono<BankAccountDTO> updateBankAccount(String bankAccountId, BankAccountDTO bankAccountDTO);
 
     Mono<Void> deleteBankAccount(String bankAccountId);
+    public Mono<Double> getBalance(String id);
 
 }

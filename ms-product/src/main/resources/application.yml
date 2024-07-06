@@ -35,5 +35,26 @@ springdoc:
     #    enabled: true
     path: index.html
 
-microservice:
-  customerUrl: http://localhost:8080/api/v1/
+
+bank:
+  accounts:
+    savings:
+      maintenanceFee: false
+      maxMonthlyTransactions: 10
+    current:
+      maintenanceFee: true
+      maxMonthlyTransactions: -1 # -1 indica sin límite
+    fixedDeposit:
+      maintenanceFee: false
+      maxMonthlyTransactions: 1
+      specificTransactionDay: 15 # Ejemplo de un día específico del mes para transacciones
+  credits:
+    personal:
+      maxCreditsPerPerson: 1
+    business:
+      maxCreditsPerCompany: -1 # -1 indica sin límite
+    creditCard:
+      personal:
+        allowed: true
+      business:
+        allowed: true

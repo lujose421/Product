@@ -21,5 +21,5 @@ public class BankAccount {
     private Double balance;
     private Integer transactionLimit;
     private List<HoldersDTO> holders;
-    private List<AuthorizedSignersDTO> authorizedSigners;
+    //private List<AuthorizedSignersDTO> authorizedSigners;
 }

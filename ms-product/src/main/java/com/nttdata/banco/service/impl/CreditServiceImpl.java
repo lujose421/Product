@@ -4,7 +4,7 @@ import com.nttdata.banco.Mapper.CreditMapper;
 import com.nttdata.banco.persistence.entity.Credit;
 import com.nttdata.banco.persistence.repository.CreditRepository;
 import com.nttdata.banco.service.CreditService;
-import com.nttdata.banco.service.CustomerService;
+import com.nttdata.banco.service.CustomerRestService;
 import com.nttdata.product.openapi.model.CreditDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +24,7 @@ public class CreditServiceImpl implements CreditService {
     private CreditRepository creditRepository;
 
     @Autowired
-    private CustomerService customerService;
+    private CustomerRestService customerService;
 
     private static final Logger logger = LoggerFactory.getLogger(BankAccountServiceImpl.class);
 
@@ -91,7 +91,7 @@ public class CreditServiceImpl implements CreditService {
     }
 
 
-    private Mono<CreditDTO> createAndSaveCredit(CreditDTO creditDTO) {
+    public Mono<CreditDTO> createAndSaveCredit(CreditDTO creditDTO) {
         return Mono.just(creditDTO)
                 .map(CreditMapper::dtoToEntity)
                 .flatMap(this.creditRepository::insert)
